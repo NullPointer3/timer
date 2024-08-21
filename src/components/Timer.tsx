@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { renderElapsedString } from '../helpers.ts'
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import TimerActionButton from './TimerActionButton.tsx'
 
 interface Props {
   id: string
@@ -10,13 +11,33 @@ interface Props {
   runningSince: number | null
   onEditClick: () => void
   onTrashClick: (timerId: string) => void
+  onStartClick: (timerId: string) => void
+  onStopClick: (timerId: string) => void
 }
 
 const Timer = (props: Props) => {
 
+  const [seconds, setSeconds] = useState(props.elapsed)
+
   const handleTrashClick = () => {
     props.onTrashClick(props.id)
   }
+
+  const handleStartClick = () => {
+    props.onStartClick(props.id)
+  }
+
+  const handleStopClick = () => {
+    props.onStopClick(props.id)
+  }
+
+  useEffect(() => {
+    const interval = setTimeout(() =>{
+      setSeconds(prev => prev + 1)
+    },1000)
+
+    return () => clearInterval(interval)
+  },[seconds])
 
   const elapsedString = renderElapsedString(props.elapsed, props.runningSince)
   return (
@@ -53,11 +74,11 @@ const Timer = (props: Props) => {
           <FaTrash/>
         </span>
       </div>
-      <button 
-        type="button" 
-        className="w-full border-[1px] border-green-500 rounded-b-md shadow-sm">
-        Start
-      </button>
+      <TimerActionButton 
+        isRunning={!!props.runningSince}
+        onStartClick={handleStartClick}
+        onStopClick={handleStopClick}
+      />
     </div>
   )
 }

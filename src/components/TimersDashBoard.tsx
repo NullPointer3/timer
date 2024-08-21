@@ -71,6 +71,40 @@ const TimersDashBoard: React.FC = () => {
     const t = newTimer(timer)
     setTimers(prev => prev.concat(t))
   }
+
+  const handleStartClick = (timerId: string) => {
+    startTimer(timerId)
+  }
+
+  const startTimer = (timerId: string) => {
+    setTimers(prev => (
+      prev.map(timer => (
+        timer.id === timerId ? {...timer, runningSince: Date.now()} : timer
+      ))
+    ))
+  }
+
+  const handleStopClick = (timerId: string) => {
+    stopTimer(timerId)
+  }
+
+  const stopTimer = (timerId: string) => {
+    const now = Date.now();
+  
+    setTimers(prev =>
+      prev.map(timer => {
+        if (timer.id === timerId && timer.runningSince) {
+          const lastElapsed = now - timer.runningSince;
+          return {
+            ...timer,
+            elapsed: timer.elapsed + lastElapsed, // Update elapsed time
+            runningSince: null, // Set the timer to not running
+          };
+        }
+        return timer
+      })
+    )
+  }
   return (
     <div className="flex justify-center items-center">
       <div className="items-center py-32">
@@ -78,6 +112,8 @@ const TimersDashBoard: React.FC = () => {
           timers={timers}
           onFormSubmit={handleEditFormSubmit}
           onTrashClick={handleTrashClick}
+          onStartClick={handleStartClick}
+          onStopClick={handleStopClick}
         />
         <ToggleableTimerForm 
           onFormSubmit={handleCreateFormSubmit}
