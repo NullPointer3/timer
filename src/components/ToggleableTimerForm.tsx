@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { useState} from 'react'
 import TimerForm from './TimerForm.tsx'
+import { FaPlus } from 'react-icons/fa'
 
-const ToggleableTimerForm = ({ isOpen }: { isOpen: boolean}) => {
+const ToggleableTimerForm = () => {
+  const [isOpen, setOpen] = useState<boolean>(false)
+
+  const handleFormOpen = () => {
+    setOpen(prev => !prev)
+  }
+
   if(isOpen){
     return(
-      <TimerForm />
+      <div className="mt-8">
+        <TimerForm />
+      </div>
     )
   }
   return (
-    <div>
-      <button type="button">+</button>
+    <div className="flex justify-center items-center mt-8">
+      <button
+        className="text-gray-500" 
+        type="button"
+        title="plus"
+        onClick={handleFormOpen}
+      >
+        <FaPlus/>
+      </button>
     </div>
   )
 }

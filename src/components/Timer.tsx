@@ -3,6 +3,7 @@ import { renderElapsedString } from '../helpers.ts'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 
 interface Props {
+  id: string
   title: string
   project: string
   elapsed: number

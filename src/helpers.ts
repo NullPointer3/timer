@@ -10,11 +10,12 @@ export const newTimer = (attr: {title: string, project: string}) => {
   return timer
 }
 
-export const renderElapsedString = (elapsed: number, runningSince: number | null) => {
+export const renderElapsedString = (elapsed: number, runningSince?: number | null) => {
   let totalElapsed = elapsed
   if(runningSince) {
     totalElapsed += Date.now() - runningSince
   }
+  else totalElapsed = elapsed
   return millisecondsToHuman(totalElapsed)
 }
 
