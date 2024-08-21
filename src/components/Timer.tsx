@@ -9,9 +9,15 @@ interface Props {
   elapsed: number
   runningSince: number | null
   onEditClick: () => void
+  onTrashClick: (timerId: string) => void
 }
 
 const Timer = (props: Props) => {
+
+  const handleTrashClick = () => {
+    props.onTrashClick(props.id)
+  }
+
   const elapsedString = renderElapsedString(props.elapsed, props.runningSince)
   return (
     <div 
@@ -41,7 +47,9 @@ const Timer = (props: Props) => {
           <FaEdit/>
         </span>
         <span 
-          className="text-gray-400 text-xl cursor-pointer">
+          className="text-gray-400 text-xl cursor-pointer"
+          onClick={handleTrashClick}
+        >
           <FaTrash/>
         </span>
       </div>

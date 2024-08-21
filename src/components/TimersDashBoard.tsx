@@ -57,6 +57,16 @@ const TimersDashBoard: React.FC = () => {
     ))
   }
 
+  const handleTrashClick = (timerId: string) => {
+    deleteTimer(timerId)
+  }
+
+  const deleteTimer = (timerId: string) => {
+    setTimers(prev => (
+      prev.filter(t => t.id !== timerId)
+    ))
+  }
+
   const createTimer = (timer: {title: string, project: string}) => {
     const t = newTimer(timer)
     setTimers(prev => prev.concat(t))
@@ -67,6 +77,7 @@ const TimersDashBoard: React.FC = () => {
         <EditableTimerList 
           timers={timers}
           onFormSubmit={handleEditFormSubmit}
+          onTrashClick={handleTrashClick}
         />
         <ToggleableTimerForm 
           onFormSubmit={handleCreateFormSubmit}

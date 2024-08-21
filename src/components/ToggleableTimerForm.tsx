@@ -20,7 +20,10 @@ const ToggleableTimerForm = (props: Props) => {
     setOpen(false)
   }
 
-  const handleFormSubmit = (timer: {title: string, project: string}) => {
+  const handleFormSubmit = (timer: {
+    title: string, 
+    project: string
+  }) => {
     props.onFormSubmit(timer)
     setOpen(false)
   }
