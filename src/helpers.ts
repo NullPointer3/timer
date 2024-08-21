@@ -3,9 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 export const newTimer = (attr: {title: string, project: string}) => {
   const timer = {
     id: uuidv4(),
-    titile: attr.title || 'Title',
+    title: attr.title || 'Title',
     project: attr.project || 'Project',
-    elapsed: 0 
+    elapsed: 0 ,
+    runningSince: Date.now()
   }
   return timer
 }

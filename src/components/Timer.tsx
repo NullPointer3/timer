@@ -8,6 +8,7 @@ interface Props {
   project: string
   elapsed: number
   runningSince: number | null
+  onEditClick: () => void
 }
 
 const Timer = (props: Props) => {
@@ -34,7 +35,9 @@ const Timer = (props: Props) => {
       <div 
         className="flex justify-end items-end space-x-2 p-4">
         <span 
-          className="text-gray-400 text-xl ">
+          className="text-gray-400 text-xl "
+          onClick={props.onEditClick}
+        >
           <FaEdit/>
         </span>
         <span 

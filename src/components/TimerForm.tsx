@@ -2,8 +2,14 @@ import React, { useState } from 'react'
 
 interface Props {
   id?: string
-  title?: string,
+  title?: string
   project?: string
+  onFormSubmit: (timer: {
+    id?: string
+    title: string, 
+    project: string
+    }) => void
+  onFormClose: () => void
 }
 
 interface InputFields {
@@ -27,6 +33,14 @@ const [ inputFields, setInputFields] = useState<InputFields>({
     }))  
   }
 
+  const handleSubmit = () => {
+    props.onFormSubmit({
+      id: props.id,
+      title: inputFields.title,
+      project: inputFields.project
+    })
+  }
+
   const submitText = props.title ? "Update" : "Create"
   return (
     <div 
@@ -48,6 +62,7 @@ const [ inputFields, setInputFields] = useState<InputFields>({
             type="text"
             name='title' 
             value={inputFields.title}
+            onChange={onInputChange}
           />
         </div>
         <div className="grid pt-2 px-4"> 
@@ -58,6 +73,7 @@ const [ inputFields, setInputFields] = useState<InputFields>({
             name='project' 
             placeholder="project" 
             value={inputFields.project}
+            onChange={onInputChange}
           />
         </div>
         <div 
@@ -69,16 +85,17 @@ const [ inputFields, setInputFields] = useState<InputFields>({
             <button
               className="" 
               type="button"
+              onClick={handleSubmit}
             >
             {submitText}
             </button>
           </div>
-
           <div 
             className="w-full border border-red-500 border-l-blue-500 
             flex justify-center items-center rounded-br-md">
             <button 
               type="button"
+              onClick={props.onFormClose}
             >
               Cancel
             </button>

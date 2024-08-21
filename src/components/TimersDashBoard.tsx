@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import EditableTimerList from './EditableTimerList.tsx'
 import ToggleableTimerForm from './ToggleableTimerForm.tsx'
+import { newTimer } from '../helpers.ts'
 
 interface Timer {
   id: string
@@ -12,7 +13,7 @@ interface Timer {
 }
 
 const TimersDashBoard: React.FC = () => {
-  const [timers, settimers] = useState<Timer[]>([
+  const [timers, setTimers] = useState<Timer[]>([
     {
       id: uuidv4(),
       title: "Learn Python",
@@ -24,18 +25,51 @@ const TimersDashBoard: React.FC = () => {
       id: uuidv4(),
       title: "Learn React",
       project: "Web Development",
-      elaspsed: 2018290,
+      elapsed: 2018290,
       runningSince: Date.now()
     }
   ])
+
+  const handleCreateFormSubmit = (timer: {
+    title: string, 
+    project: string
+  }) => {
+    createTimer(timer)
+  }
+
+  const handleEditFormSubmit = (attr: {
+    id?: string, 
+    title: string, 
+    project: string
+  }) => {
+    updateTimer(attr)
+  }
+
+  const updateTimer = (attr: {
+    id?: string, 
+    title: string, 
+    project: string
+  }) => {
+    setTimers(prev => (
+      prev.map(timer => (
+        timer.id === attr.id ? {...timer, title: attr.title, project: attr.project} : timer
+      ))
+    ))
+  }
+
+  const createTimer = (timer: {title: string, project: string}) => {
+    const t = newTimer(timer)
+    setTimers(prev => prev.concat(t))
+  }
   return (
     <div className="flex justify-center items-center">
       <div className="items-center py-32">
         <EditableTimerList 
           timers={timers}
+          onFormSubmit={handleEditFormSubmit}
         />
         <ToggleableTimerForm 
-          isOpen={true}
+          onFormSubmit={handleCreateFormSubmit}
         />
       </div>
     </div>
