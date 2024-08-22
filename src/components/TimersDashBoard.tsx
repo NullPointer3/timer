@@ -97,8 +97,8 @@ const TimersDashBoard: React.FC = () => {
           const lastElapsed = now - timer.runningSince;
           return {
             ...timer,
-            elapsed: timer.elapsed + lastElapsed, // Update elapsed time
-            runningSince: null, // Set the timer to not running
+            elapsed: timer.elapsed + lastElapsed,
+            runningSince: null, 
           };
         }
         return timer

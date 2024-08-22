@@ -25,7 +25,11 @@ const EditableTimer = (props: Props) => {
     closeForm()
   }
 
-  const handleSubmit = (timer: {id?: string, title: string, project: string}) => {
+  const handleSubmit = (timer: {
+    id?: string, 
+    title: string, 
+    project: string
+  }) => {
     props.onFormSubmit(timer)
     closeForm()
   }
@@ -33,9 +37,11 @@ const EditableTimer = (props: Props) => {
   const openForm = () => {
     setEditFormOpen(true)
   }
+
   const closeForm = () => {
     setEditFormOpen(false)
   }
+  
   if(isEditFormOpen){
     return(
       <TimerForm

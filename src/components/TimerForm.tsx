@@ -19,7 +19,7 @@ interface InputFields {
 
 type OnInpuChange = (evt: React.ChangeEvent<HTMLInputElement>) => void
 
-const TimerForm: React.FC<Props> = (props: Props) => {
+const TimerForm = (props: Props) => {
 const [ inputFields, setInputFields] = useState<InputFields>({
   title: props.title || "",
   project: props.project || ""
