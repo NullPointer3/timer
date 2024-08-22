@@ -79,7 +79,7 @@ app.post('/api/timers', (req, res) => {
 })
 
 app.post('/api/timers/start', (req, res) => {
-  const {id, start}: { id: string, start: number} = req.body 
+  const { id, start }: { id: string, start: string} = req.body
   fs.readFile(DATA_FILE, (err, data) => {
     if(err){
       console.error("Error reading data")
@@ -89,9 +89,11 @@ app.post('/api/timers/start', (req, res) => {
     // Parse JSON file
     try{
       const timers: Timer[] = JSON.parse(data.toString())
-      timers.forEach(timer => (
-        timer.id === id && !timer.runningSince ? {...timer, runningSince: start} : timer 
-      ))
+      timers.forEach(timer => {
+        if(timer.id === id && !timer.runningSince){
+          timer.runningSince = parseInt(start)
+        }
+      })
       fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
         res.json({message: "Timer is Started"});
       })
@@ -99,6 +101,86 @@ app.post('/api/timers/start', (req, res) => {
     }catch(parseError){
       console.error('Error Parsing the JSON data', parseError)
       return res.status(500).json({message: "Internal Server Error"})
+    }
+  })
+})
+
+app.post('/api/timers/stop', (req, res) => {
+  const { id, stop }: { id: string, stop: string} = req.body
+  fs.readFile(DATA_FILE, (err, data) => {
+    if(err){
+      console.error("Error reading file")
+      return res.status(500).json({message: "Internal Server Error"})
+    }
+
+    try{
+      const timers: Timer[] = JSON.parse(data.toString())
+      timers.forEach(timer => {
+        if(timer.id === id && timer.runningSince !== null){
+          const delta = parseInt(stop) - timer.runningSince
+          timer.elapsed += delta
+          timer.runningSince = null
+        }
+      })
+      fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+        res.status(200).json({message: "Timer successfully stopped"})
+      })
+    }catch(parseErr){
+      console.error("Failed Parsing the JSON file", parseErr)
+      return res.status(500).json({message: "Internal Server Error"})
+    }
+  })
+})
+
+app.put('/api/timers', (req, res) => {
+  const { id, title, project}: {id: string, title: string, project: string} = req.body
+  fs.readFile(DATA_FILE, (err, data) => {
+    if(err){
+      console.error("Failed Reading File")
+      return res.status(500).json({message: "Internal Server Error"})
+    }
+
+    try{
+      const timers: Timer[] = JSON.parse(data.toString())
+      timers.forEach(timer => {
+        if(timer.id === id){
+          timer.title = title,
+          timer.project = project
+        }
+      })
+      fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+        res.status(200).json({message: "Timer Updated"})
+      })
+    }catch(parseError){
+      console.error('Error Parsing the JSON file', parseError)
+      return res.status(500).json({error: "Internal Server Error"})
+    }
+  })
+})
+
+app.delete('/api/timers', (req, res) => {
+  const { id } : {id: string} = req.body
+  fs.readFile(DATA_FILE, (err, data) => {
+    if(err){
+      console.error("Error reading Data", err)
+      return res.status(500).json({err: "Internal Server Error"})
+    }
+
+    try{
+       let timers: Timer[] = JSON.parse(data.toString())
+
+      const originalLength = timers.length
+
+      timers = timers.filter(timer => timer.id !== id)
+      if(timers.length === originalLength){
+        res.status(404).json({error: "Timer not found"})
+      }
+      fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
+        res.status(200).json({message: "Timer is Deleted"})
+      })
+    }catch(parseError) {
+      console.error("Error Parsing the JSON data")
+      return res.status(500).json({err: "Internal Server Error"})
     }
   })
 })
