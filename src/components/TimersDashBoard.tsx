@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import React, { useEffect, useState } from 'react'
 import EditableTimerList from './EditableTimerList.tsx'
 import ToggleableTimerForm from './ToggleableTimerForm.tsx'
 import { newTimer } from '../helpers.ts'
+import { getTimers } from '../client.ts'
 
 interface Timer {
   id: string
@@ -12,23 +12,14 @@ interface Timer {
   runningSince: null | number
 }
 
-const TimersDashBoard: React.FC = () => {
-  const [timers, setTimers] = useState<Timer[]>([
-    {
-      id: uuidv4(),
-      title: "Learn Python",
-      project: "Machine Learning",
-      elapsed: 2321300,
-      runningSince: null
-    },
-    {
-      id: uuidv4(),
-      title: "Learn React",
-      project: "Web Development",
-      elapsed: 2018290,
-      runningSince: Date.now()
-    }
-  ])
+const TimersDashBoard = () => {
+  const [timers, setTimers] = useState<Timer[]>([])
+
+  useEffect(() => {
+    getTimers((fetchedTimers) => {
+      setTimers(fetchedTimers);
+    });
+  }, []);
 
   const handleCreateFormSubmit = (timer: {
     title: string, 
