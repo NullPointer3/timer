@@ -24,16 +24,37 @@ export const getTimers = (success: (timers: Timer[]) => void)=> {
       console.error("Failed Fetching Data", err)
     })
 }
-const checkStatus = async (response: Response): Promise<any> => {
-  if(!response.ok){
-    const errorText = response.text()
-    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
-  }
-  return await response.json()
+
+export const startTimerClient = (data: { id: string, start: number }) => {
+  return fetch('http://localhost:3001/api/timers/start', {
+    method: 'post',
+    body: JSON.stringify(data),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+  }).then(checkStatus)
+    .catch(err => {
+      console.error("Failed To Start Timer", err)
+    })
 }
 
-export const createTimer = (data: Timer[]): Promise<Timer[]> => {
-  return fetch('/api/timers', {
+export const stopTimerClient = (data: { id: string, stop: number}) => {
+  return fetch('http://localhost:3001/api/timers/stop', {
+    method: 'post',
+    body: JSON.stringify(data),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+  }).then(checkStatus)
+    .catch(err => {
+      console.error("Failed to stop Timer", err)
+    })
+}
+
+export const createTimerClient = (data: Timer): Promise<Timer[]> => {
+  return fetch('http://localhost:3001/api/timers', {
     method: 'post',
     body: JSON.stringify(data),
     headers: {
@@ -43,6 +64,21 @@ export const createTimer = (data: Timer[]): Promise<Timer[]> => {
   }).then(checkStatus)
 }
 
+export const deleteTimerClient = (data: string) => {
+  return fetch('http://localhost:3001/api/timers', {
+    method: 'delete',
+    body: JSON.stringify(data),
+    headers: {
+      "Accept": 'application/json',
+      "Content-Type": "application/json"
+    }
+  }).then(checkStatus)
+}
 
-
-
+const checkStatus = async (response: Response): Promise<any> => {
+  if(!response.ok){
+    const errorText = response.text()
+    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
+  }
+  return await response.json()
+}

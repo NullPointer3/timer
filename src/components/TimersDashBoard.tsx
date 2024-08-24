@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react'
 import EditableTimerList from './EditableTimerList.tsx'
 import ToggleableTimerForm from './ToggleableTimerForm.tsx'
 import { newTimer } from '../helpers.ts'
-import { getTimers } from '../client.ts'
+import { 
+  getTimers, 
+  startTimerClient, 
+  stopTimerClient,
+  createTimerClient,
+  deleteTimerClient
+} from '../client.ts'
 
 interface Timer {
   id: string
@@ -19,7 +25,7 @@ const TimersDashBoard = () => {
     getTimers((fetchedTimers) => {
       setTimers(fetchedTimers);
     });
-  }, []);
+  },[timers]);
 
   const handleCreateFormSubmit = (timer: {
     title: string, 
@@ -56,11 +62,20 @@ const TimersDashBoard = () => {
     setTimers(prev => (
       prev.filter(t => t.id !== timerId)
     ))
+    deleteTimerClient(timerId)
+    .then(() => {
+      console.log("Timer successfully Deleted")
+    })
+    .catch(err => {
+      console.error("Failed to delete Timer", err)
+    })
+    setTimers(prev => prev)
   }
 
   const createTimer = (timer: {title: string, project: string}) => {
     const t = newTimer(timer)
     setTimers(prev => prev.concat(t))
+    createTimerClient(t)
   }
 
   const handleStartClick = (timerId: string) => {
@@ -73,6 +88,14 @@ const TimersDashBoard = () => {
         timer.id === timerId ? {...timer, runningSince: Date.now()} : timer
       ))
     ))
+    startTimerClient({
+      id: timerId,
+      start: Date.now()
+    }).then(() => {
+      console.log('Timer started Successfully')
+    }).catch(err => {
+      console.error('Fail to start Timer', err)
+    })
   }
 
   const handleStopClick = (timerId: string) => {
@@ -95,7 +118,16 @@ const TimersDashBoard = () => {
         return timer
       })
     )
+    stopTimerClient({
+      id: timerId, 
+      stop: now
+    }).then(() => {
+      console.log("Timer stopped")
+    }).catch(err => {
+      console.error("Failed to stop timer", err)
+    })
   }
+
   return (
     <div className="flex justify-center items-center">
       <div className="items-center py-32">

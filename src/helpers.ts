@@ -6,7 +6,7 @@ export const newTimer = (attr: {title: string, project: string}) => {
     title: attr.title || 'Title',
     project: attr.project || 'Project',
     elapsed: 0 ,
-    runningSince: Date.now()
+    runningSince: Date.now() 
   }
   return timer
 }

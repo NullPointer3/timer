@@ -76,7 +76,7 @@ app.post('/api/timers', (req, res) => {
       timers.push(newTimer)
       fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
         res.setHeader('Cache-control', 'no-cache')
-        res.status(200).json({message: "Post request successful"})
+        res.status(200).json(timers)
       })
     }catch(parseError){
       console.error('Error parsing the data', parseError)
@@ -183,7 +183,7 @@ app.delete('/api/timers', (req, res) => {
         res.status(404).json({error: "Timer not found"})
       }
       fs.writeFile(DATA_FILE, JSON.stringify(timers, null, 4), () => {
-        res.status(200).json({message: "Timer is Deleted"})
+        res.status(200).json({})
       })
     }catch(parseError) {
       console.error("Error Parsing the JSON data")
