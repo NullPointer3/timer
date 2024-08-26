@@ -165,8 +165,8 @@ app.put('/api/timers', (req, res) => {
   })
 })
 
-app.delete('/api/timers', (req, res) => {
-  const { id } : {id: string} = req.body
+app.delete('/api/timers:id', (req, res) => {
+  const  id  = req.params.id
   fs.readFile(DATA_FILE, (err, data) => {
     if(err){
       console.error("Error reading Data", err)

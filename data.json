@@ -1,15 +1,8 @@
 [
     {
-        "id": "2c43306e-5b44-4ff8-8753-33c35adbd06f",
-        "title": "Ponder origins of universe",
-        "project": "Life Chores",
-        "elapsed": 268212861427,
-        "runningSince": null
-    },
-    {
         "id": "711a3a8b-5eb5-4654-82aa-2f5bedb99b21",
-        "title": "JavaScript",
-        "project": "Web Development",
+        "title": "JavaScript lang",
+        "project": "Web Development env",
         "elapsed": 1003,
         "runningSince": null
     },
@@ -25,13 +18,6 @@
         "title": "Hello World",
         "project": "New programming Lang",
         "elapsed": 13973,
-        "runningSince": null
-    },
-    {
-        "id": "29f2d1d8-a967-4edb-aa3d-79ebc8159397",
-        "title": "Express",
-        "project": "Backend",
-        "elapsed": 0,
         "runningSince": null
     }
 ]

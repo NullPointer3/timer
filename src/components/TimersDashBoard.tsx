@@ -7,7 +7,8 @@ import {
   startTimerClient, 
   stopTimerClient,
   createTimerClient,
-  deleteTimerClient
+  deleteTimerClient,
+  updateTimerClient
 } from '../client.ts'
 
 interface Timer {
@@ -52,6 +53,7 @@ const TimersDashBoard = () => {
         timer.id === attr.id ? {...timer, title: attr.title, project: attr.project} : timer
       ))
     ))
+    updateTimerClient(attr)
   }
 
   const handleTrashClick = (timerId: string) => {
@@ -69,7 +71,6 @@ const TimersDashBoard = () => {
     .catch(err => {
       console.error("Failed to delete Timer", err)
     })
-    setTimers(prev => prev)
   }
 
   const createTimer = (timer: {title: string, project: string}) => {

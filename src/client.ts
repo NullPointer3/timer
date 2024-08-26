@@ -64,10 +64,20 @@ export const createTimerClient = (data: Timer): Promise<Timer[]> => {
   }).then(checkStatus)
 }
 
-export const deleteTimerClient = (data: string) => {
-  return fetch('http://localhost:3001/api/timers', {
-    method: 'delete',
+export const updateTimerClient = (data: {id?: string, title: string, project: string}) => {
+  return fetch("http://localhost:3001/api/timers", {
+    method: 'PUT',
     body: JSON.stringify(data),
+    headers: {
+      "Accept": 'application/json',
+      "Content-Type": "application/json"
+    }
+  }).then(checkStatus)
+}
+
+export const deleteTimerClient = (timerId: string) => {
+  return fetch(`http://localhost:3001/api/timers${timerId}`, {
+    method: 'DELETE',
     headers: {
       "Accept": 'application/json',
       "Content-Type": "application/json"
